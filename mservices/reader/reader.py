@@ -7,7 +7,7 @@ import psycopg2
 try:
     conn = psycopg2.connect("dbname=%s user=%s host=%s password=%s" % (os.environ['DB_NAME'], os.environ['DB_USER'], os.environ['DB_HOST'], os.environ['DB_PASS']))
 except:
-    print 'I am unable to connect to the database'
+    print('I am unable to connect to the database')
     sys.exit(1)
 
 
