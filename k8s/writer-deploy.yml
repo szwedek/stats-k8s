@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: writer
+  name: writer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: writer
+  template:
+    metadata:
+      labels:
+        app: writer
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: postgresql
+        envFrom:
+        - secretRef:
+            name: writer-secrets
+        image: gcr.io/shaped-terrain-290416/writer:latest
+        imagePullPolicy: Always
+        name: writer
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 32Mi
+      restartPolicy: Always
