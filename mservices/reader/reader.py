@@ -2,6 +2,7 @@
 
 import sys
 import json
+import os
 
 import psycopg2
 try:

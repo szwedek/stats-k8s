@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: reader
+  name: reader-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reader
+  template:
+    metadata:
+      labels:
+        app: reader
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          value: postgresql
+        envFrom:
+        - secretRef:
+            name: reader-secrets
+        image: gcr.io/shaped-terrain-290416/reader:latest
+        imagePullPolicy: Always
+        name: reader
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 32Mi
+      restartPolicy: Always
