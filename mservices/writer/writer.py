@@ -3,6 +3,7 @@
 import sys
 import os
 import json
+import logging
 from datetime import datetime
 
 import psycopg2
@@ -14,7 +15,13 @@ except:
 
 
 from flask import Flask, request
+from gevent.pywsgi import WSGIServer
 app = Flask(__name__)
+app_health = Flask(__name__)
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 @app.route('/log', methods=['POST'])
 def log():
@@ -28,5 +35,12 @@ def log():
     conn.commit()
     return "OK"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=False)
+@app_health.route('/healthz')
+def heatlth():
+    return "OK"
+
+https_server = WSGIServer(('0.0.0.0', 80), app, log=logger)
+https_server.start()
+
+http_server = WSGIServer(('0.0.0.0', 81), app_health, log=logger)
+http_server.serve_forever()
