@@ -11,4 +11,4 @@ COPY --from=build-env /app /app
 
 WORKDIR /app
 ENV PYTHONPATH=/app/packages
-CMD [ "packages/bin/gunicorn", "-w 3", "-b :80", "--access-logfile=-", "writer:app" ]
+CMD [ "writer.py" ]
