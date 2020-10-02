@@ -39,8 +39,8 @@ def log():
 def heatlth():
     return "OK"
 
-https_server = WSGIServer(('0.0.0.0', 80), app, log=logger)
-https_server.start()
-
 http_server = WSGIServer(('0.0.0.0', 81), app_health, log=logger)
-http_server.serve_forever()
+http_server.start()
+
+https_server = WSGIServer(('0.0.0.0', 80), app, log=logger)
+https_server.serve_forever()
